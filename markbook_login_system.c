@@ -98,7 +98,7 @@ void filewrite(char *filename){
 
 void fileread(char *filename){
     FILE *f;
-    int i;
+    int i,ok;
     tstudent s;
     f=fopen(filename, "rb");
     if(f){
@@ -106,8 +106,14 @@ void fileread(char *filename){
             if(fread(&s,sizeof(s),1,f)){
                 printf("\n%2d.%-15s",s.num,s.name);
                 i=0;
-                while(s.marks[i]!=0){
-                    printf("%2d",s.marks[i]);
+                ok=1;
+                while(i!=10){
+                    if(s.marks[i]==0)
+                        ok=0;
+                    if(ok==1)
+                        printf("%2d",s.marks[i]);
+                    else
+                        printf("  ");
                     i++;
                 }
                 printf("%7.2f",s.avr);
@@ -311,7 +317,7 @@ int student_login(char *filename, char *sfilename,char *tfilename){
     FILE *f;
     int ok;
     char *p;
-    const char s[30],c[30],temp[80];
+    char s[30],c[30],temp[80];
     printf("Username: ");
     gets(s);
     printf("Password: ");
@@ -322,10 +328,15 @@ int student_login(char *filename, char *sfilename,char *tfilename){
         if(p!=0){
             p=strstr(p,"@#$");
             if(p!=0){
-                p=strstr(p,c);
+                p=strstr(p," ");
                 if(p!=0){
-                    ok=1;
-                    break;
+                    p=strstr(p,c);
+                    if(p!=0){
+                        ok=1;
+                        break;
+                    }
+                    else
+                        ok=0;
                 }
                 else
                     ok=0;
@@ -348,7 +359,7 @@ int teacher_login(char *filename, char *sfilename, char *tfilename){
     FILE *f;
     int ok;
     char *p;
-    const char s[30],c[30],temp[80];
+    char s[30],c[30],temp[80];
     printf("Username: ");
     gets(s);
     printf("Password: ");
@@ -359,10 +370,15 @@ int teacher_login(char *filename, char *sfilename, char *tfilename){
         if(p!=0){
             p=strstr(p,"@#$");
             if(p!=0){
-                p=strstr(p,c);
+                p=strstr(p," ");
                 if(p!=0){
-                    ok=1;
-                    break;
+                    p=strstr(p,c);
+                    if(p!=0){
+                        ok=1;
+                        break;
+                    }
+                    else
+                        ok=0;
                 }
                 else
                     ok=0;
